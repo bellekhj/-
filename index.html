@@ -1,20 +1,222 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>다문화 학생용 음성 안내</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    h2 { background-color: #f0f0f0; padding: 10px; border-left: 5px solid #4CAF50; }
-    .section { margin-bottom: 40px; }
-    button { margin: 5px; padding: 10px 20px; font-size: 16px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    h2 {
+      color: white;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    h2::before {
+      content: "🎵";
+      font-size: 1.2em;
+      filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* 무지개색 섹션 헤더 */
+    .section:nth-child(2) h2 { background: linear-gradient(45deg, #ff4757, #ff6b7a); } /* 빨강 */
+    .section:nth-child(3) h2 { background: linear-gradient(45deg, #ff7f50, #ffa726); } /* 주황 */
+    .section:nth-child(4) h2 { background: linear-gradient(45deg, #ffd54f, #ffeb3b); } /* 노랑 */
+    .section:nth-child(5) h2 { background: linear-gradient(45deg, #66bb6a, #81c784); } /* 초록 */
+    .section:nth-child(6) h2 { background: linear-gradient(45deg, #42a5f5, #64b5f6); } /* 파랑 */
+    .section:nth-child(7) h2 { background: linear-gradient(45deg, #7e57c2, #9575cd); } /* 남색 */
+    .section:nth-child(8) h2 { background: linear-gradient(45deg, #ab47bc, #ba68c8); } /* 보라 */
+    .section:nth-child(9) h2 { background: linear-gradient(45deg, #ec407a, #f06292); } /* 분홍 */
+    .section:nth-child(10) h2 { background: linear-gradient(45deg, #26a69a, #4db6ac); } /* 청록 */
+    .section:nth-child(11) h2 { background: linear-gradient(45deg, #8d6e63, #a1887f); } /* 갈색 */
+    .section:nth-child(12) h2 { background: linear-gradient(45deg, #78909c, #90a4ae); } /* 회색 */
+    
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+      position: relative;
+      overflow: hidden;
+      margin: 2px;
+      font-family: inherit;
+      white-space: nowrap;
+      width: auto;
+      min-width: fit-content;
+    }
+    
+    button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    }
+    
+    button:active {
+      transform: translateY(0px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+    }
+    
+    button.playing {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { 
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        transform: translateY(-2px) scale(1);
+      }
+      50% { 
+        box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+        transform: translateY(-2px) scale(1.02);
+      }
+      100% { 
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        transform: translateY(-2px) scale(1);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
+      
+      h1 {
+        font-size: 2em;
+      }
+      
+      .button-grid {
+        flex-direction: column;
+      }
+      
+      button {
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+      
+      .section {
+        padding: 15px;
+      }
+      
+      h2 {
+        font-size: 1.3em;
+        padding: 10px 12px;
+      }
+    }
+    
+    /* 스크롤바 스타일링 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+    }
   </style>
 </head>
 <body>
-  <h1>🗣️ 다문화 학생용 상황별 음성 안내</h1>
+  <div class="container">
+    <h1>🗣️ 다문화 학생용 상황별 음성 안내</h1>
+
 <div class="section">
 <h2>아침 시간</h2>
+<div class="button-grid">
+<button onclick="playAudio('아침 시간/가방 지퍼를 닫으세요.mp3')">가방 지퍼를 닫으세요</button>
+<button onclick="playAudio('아침 시간/가방을 걸어주세요.mp3')">가방을 걸어주세요</button>
 <button onclick="playAudio('아침%20시간/결석한%20학생%20있나요.wav')">결석한 학생 있나요</button>
 <button onclick="playAudio('아침%20시간/내일%20꼭%20가져오세요.wav')">내일 꼭 가져오세요</button>
 <button onclick="playAudio('아침%20시간/누구인가요.wav')">누구인가요</button>
@@ -29,20 +231,23 @@
 <button onclick="playAudio('아침%20시간/아픈%20학생%20있나요.wav')">아픈 학생 있나요</button>
 <button onclick="playAudio('아침%20시간/안내장%20제출하세요.wav')">안내장 제출하세요</button>
 <button onclick="playAudio('아침%20시간/앉으세요.wav')">앉으세요</button>
+<button onclick="playAudio('아침 시간/어디가 아프나요.mp3')">어디가 아프나요</button>
 <button onclick="playAudio('아침%20시간/인사합시다.wav')">인사합시다</button>
 <button onclick="playAudio('아침%20시간/일어나세요.wav')">일어나세요</button>
 <button onclick="playAudio('아침%20시간/책%20읽으세요.wav')">책 읽으세요</button>
 <button onclick="playAudio('아침%20시간/책상%20위%20정리하세요.wav')">책상 위 정리하세요</button>
 <button onclick="playAudio('아침%20시간/책상%20줄%20맞추세요.wav')">책상 줄 맞추세요</button>
 <button onclick="playAudio('아침%20시간/화장실%20다녀오세요.wav')">화장실 다녀오세요</button>
-<button onclick="playAudio('아침 시간/어디가 아프나요.mp3')">어디가 아프나요</button>
-<button onclick="playAudio('아침 시간/가방 지켜를 담으세요.mp3')">가방 지켜를 담으세요</button>
-<button onclick="playAudio('아침 시간/가방을 잘 챙겨주요.mp3')">가방을 잘 챙겨주요</button>  
 </div>
+</div>
+
 <div class="section">
 <h2>수업 시간</h2>
+<div class="button-grid">
 <button onclick="playAudio('수업%20시간/TV화면%20보세요.wav')">TV화면 보세요</button>
 <button onclick="playAudio('수업%20시간/가세요.wav')">가세요</button>
+<button onclick="playAudio('수업 시간/괜찮나요.mp3')">괜찮나요</button>
+<button onclick="playAudio('수업 시간/괜찮습니다.mp3')">괜찮습니다</button>
 <button onclick="playAudio('수업%20시간/교과서%20펴세요.wav')">교과서 펴세요</button>
 <button onclick="playAudio('수업%20시간/그리세요.wav')">그리세요</button>
 <button onclick="playAudio('수업%20시간/기다리세요.wav')">기다리세요</button>
@@ -67,6 +272,7 @@
 <button onclick="playAudio('수업%20시간/따라%20오세요.wav')">따라 오세요</button>
 <button onclick="playAudio('수업%20시간/말하세요.wav')">말하세요</button>
 <button onclick="playAudio('수업%20시간/문제%20푸세요.wav')">문제 푸세요</button>
+<button onclick="playAudio('수업 시간/바르게 쓰세요.mp3')">바르게 쓰세요</button>
 <button onclick="playAudio('수업%20시간/발표할%20사람.wav')">발표할 사람</button>
 <button onclick="playAudio('수업%20시간/버리세요.wav')">버리세요</button>
 <button onclick="playAudio('수업%20시간/보충%20하세요.wav')">보충 하세요</button>
@@ -82,7 +288,8 @@
 <button onclick="playAudio('수업%20시간/쓰세요.wav')">쓰세요</button>
 <button onclick="playAudio('수업%20시간/앉으세요.wav')">앉으세요</button>
 <button onclick="playAudio('수업%20시간/연습하세요.wav')">연습하세요</button>
-<button onclick="playAudio('수업%20시간/옆드리세요.wav')">옆드리세요</button>
+<button onclick="playAudio('수업%20시간/엎드리세요.wav')">엎드리세요</button>
+<button onclick="playAudio('수업 시간/외우세요.mp3')">외우세요</button>
 <button onclick="playAudio('수업%20시간/오세요.wav')">오세요</button>
 <button onclick="playAudio('수업%20시간/이름%20쓰세요.wav')">이름 쓰세요</button>
 <button onclick="playAudio('수업%20시간/일어나세요.wav')">일어나세요</button>
@@ -101,54 +308,63 @@
 <button onclick="playAudio('수업%20시간/친구에게%20주세요.wav')">친구에게 주세요</button>
 <button onclick="playAudio('수업%20시간/하세요.wav')">하세요</button>
 <button onclick="playAudio('수업%20시간/하지%20마세요.wav')">하지 마세요</button>
-<button onclick="playAudio('수업 시간/외우세요.mp3')">외우세요</button>
-<button onclick="playAudio('수업 시간/괜찮나요.mp3')">괜찮나요</button>
-<button onclick="playAudio('수업 시간/괜찮습니다.mp3')">괜찮습니다</button>
-<button onclick="playAudio('수업 시간/바르게 쓰세요.mp3')">바르게 쓰세요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>쉬는 시간</h2>
+<div class="button-grid">
+<button onclick="playAudio('쉬는 시간/매일 머리 감고 샤워해요.mp3')">매일 머리 감고 샤워해요</button>
 <button onclick="playAudio('쉬는%20시간/물%20마셔요.wav')">물 마셔요</button>
 <button onclick="playAudio('쉬는%20시간/비누로%20손%20씻고%20오세요.wav')">비누로 손 씻고 오세요</button>
 <button onclick="playAudio('쉬는%20시간/쉬는%20시간이에요.wav')">쉬는 시간이에요</button>
-<button onclick="playAudio('쉬는%20시간/줄%20서세요.wav')">줄 서세요</button>
-<button onclick="playAudio('쉬는 시간/매일 머리 감고 샤워해요.mp3')">매일 머리 감고 샤워해요</button>
-<button onclick="playAudio('쉬는 시간/집에 가고 싶나요.mp3')">집에 가고 싶나요</button>
 <button onclick="playAudio('쉬는 시간/놀이터.mp3')">놀이터</button>
 <button onclick="playAudio('쉬는 시간/운동장.mp3')">운동장</button>
 <button onclick="playAudio('쉬는 시간/운동장에 나가서 놀아요.mp3')">운동장에 나가서 놀아요</button>
+<button onclick="playAudio('쉬는 시간/집에 가고 싶나요.mp3')">집에 가고 싶나요</button>
+<button onclick="playAudio('쉬는%20시간/줄%20서세요.wav')">줄 서세요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>점심 시간</h2>
+<div class="button-grid">
 <button onclick="playAudio('점심%20시간/간식.wav')">간식</button>
+<button onclick="playAudio('점심 시간/급식실에서는 조심히 걸어야해요.mp3')">급식실에서는 조심히 걸어야해요</button>
 <button onclick="playAudio('점심%20시간/급식.wav')">급식</button>
 <button onclick="playAudio('점심%20시간/깨끗하게%20먹어요.wav')">깨끗하게 먹어요</button>
+<button onclick="playAudio('점심 시간/국이 뜨거우니 식판 윗쪽을 잡으세요.mp3')">국이 뜨거우니 식판 윗쪽을 잡으세요</button>
 <button onclick="playAudio('점심%20시간/남기지%20않아요.wav')">남기지 않아요</button>
 <button onclick="playAudio('점심%20시간/먹어요.wav')">먹어요</button>
 <button onclick="playAudio('점심%20시간/먹을%20수%20있는%20것만%20받아오세요.wav')">먹을 수 있는 것만 받아오세요</button>
 <button onclick="playAudio('점심%20시간/물.wav')">물</button>
+<button onclick="playAudio('점심 시간/식사 후 남은 음식은 한 곳에 모아서 버리세요.mp3')">식사 후 남은 음식은 한 곳에 모아서 버리세요</button>
+<button onclick="playAudio('점심 시간/식판을 바르게 쌓아요.mp3')">식판을 바르게 쌓아요</button>
+<button onclick="playAudio('점심 시간/숟가락과 젓가락을 던지지 마세요.mp3')">숟가락과 젓가락을 던지지 마세요</button>
+<button onclick="playAudio('점심 시간/익숙하지 않은 음식도 도전해 보세요.mp3')">익숙하지 않은 음식도 도전해 보세요</button>
 <button onclick="playAudio('점심%20시간/양치하세요.wav')">양치하세요</button>
 <button onclick="playAudio('점심%20시간/잘%20먹겠습니다.wav')">잘 먹겠습니다</button>
-<button onclick="playAudio('점심 시간/식판을 바르게 쌓아요.mp3')">식판을 바르게 쌓아요</button>
-    <button onclick="playAudio('점심 시간/숟가락과 젓가락을 던지지 마세요.mp3')">숟가락과 젓가락을 던지지 마세요</button>
-    <button onclick="playAudio('점심 시간/국이 뜨거우니 식판 윗쪽을 잡으세요.mp3')">국이 뜨거우니 식판 윗쪽을 잡으세요</button>
-    <button onclick="playAudio('점심 시간/식사 후 남은 음식은 한 곳에 모아서 버리세요.mp3')">식사 후 남은 음식은 한 곳에 모아서 버리세요</button>
-    <button onclick="playAudio('점심 시간/급식실에서는 조심히 걸어야해요.mp3')">급식실에서는 조심히 걸어야해요</button>
-    <button onclick="playAudio('점심 시간/익숙하지 않은 음식도 도전해 보세요.mp3')">익숙하지 않은 음식도 도전해 보세요</button>
-    <button onclick="playAudio('점심 시간/후식은 급식실에서만 먹어야해요.mp3')">후식은 급식실에서만 먹어야해요</button>
-    <button onclick="playAudio('점심 시간/후식은 밥 먹고 먹어요.mp3')">후식은 밥 먹고 먹아요</button>
+<button onclick="playAudio('점심 시간/후식은 급식실에서만 먹어야해요.mp3')">후식은 급식실에서만 먹어야해요</button>
+<button onclick="playAudio('점심 시간/후식은 밥 먹고 먹어요.mp3')">후식은 밥 먹고 먹어요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>수업 후</h2>
+<div class="button-grid">
 <button onclick="playAudio('수업%20후/가방%20싸세요.wav')">가방 싸세요</button>
 <button onclick="playAudio('수업%20후/부모님%20서명%20받아오세요.wav')">부모님 서명 받아오세요</button>
 <button onclick="playAudio('수업%20후/부모님께%20보여드리세요.wav')">부모님께 보여드리세요</button>
+<button onclick="playAudio('수업 후/집에 가세요.mp3')">집에 가세요</button>
 <button onclick="playAudio('수업%20후/청소하세요.wav')">청소하세요</button>
 <button onclick="playAudio('수업%20후/학교마치고%20남으세요.wav')">학교마치고 남으세요</button>
-<button onclick="playAudio('수업 후/집에 가세요.mp3')">집에 가세요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>금지어 안내</h2>
+<div class="button-grid">
+<button onclick="playAudio('금지어 안내/걱정하지 마세요.mp3')">걱정하지 마세요</button>
 <button onclick="playAudio('금지어%20안내/노래부르지%20마세요.wav')">노래부르지 마세요</button>
 <button onclick="playAudio('금지어%20안내/뛰지%20마세요.wav')">뛰지 마세요</button>
 <button onclick="playAudio('금지어%20안내/만지지%20마세요.wav')">만지지 마세요</button>
@@ -160,25 +376,28 @@
 <button onclick="playAudio('금지어%20안내/안돼요.wav')">안돼요</button>
 <button onclick="playAudio('금지어%20안내/예의가%20아니에요.wav')">예의가 아니에요</button>
 <button onclick="playAudio('금지어%20안내/욕하지%20마세요.wav')">욕하지 마세요</button>
+<button onclick="playAudio('금지어 안내/장난치지 마세요.mp3')">장난치지 마세요</button>
+<button onclick="playAudio('금지어 안내/지각하지 마세요.mp3')">지각하지 마세요</button>
 <button onclick="playAudio('금지어%20안내/조용히%20하세요.wav')">조용히 하세요</button>
 <button onclick="playAudio('금지어%20안내/하지%20마세요.wav')">하지 마세요</button>
 <button onclick="playAudio('금지어%20안내/화내지%20마세요.wav')">화내지 마세요</button>
-<button onclick="playAudio('금지어 안내/장난치지 마세요.mp3')">장난치지 마세요</button>
-<button onclick="playAudio('금지어 안내/지각하지 마세요.mp3')">지각하지 마세요</button>
-<button onclick="playAudio('금지어 안내/걱정하지 마세요.mp3')">걱정하지 마세요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>디지털 기기 사용 안내</h2>
-<button onclick="playAudio('디지털%20기기%20사용%20안내/껐다가%20다시%20켜세요.wav')">껐다가 다시 켜세요</button>
-<button onclick="playAudio('디지털%20기기%20사용%20안내/로그아웃.wav')">로그아웃</button>
+<div class="button-grid">
 <button onclick="playAudio('디지털%20기기%20사용%20안내/로그인.wav')">로그인</button>
 <button onclick="playAudio('디지털%20기기%20사용%20안내/태블릿%20가져오세요.wav')">태블릿 가져오세요</button>
 <button onclick="playAudio('디지털%20기기%20사용%20안내/태블릿%20넣으세요.wav')">태블릿 넣으세요</button>
 <button onclick="playAudio('디지털%20기기%20사용%20안내/태블릿%20충전하세요.wav')">태블릿 충전하세요</button>
 <button onclick="playAudio('디지털%20기기%20사용%20안내/태블릿%20켜세요.wav')">태블릿 켜세요</button>
 </div>
+</div>
+
 <div class="section">
 <h2>인사와 감정 표현</h2>
+<div class="button-grid">
 <button onclick="playAudio('인사와%20감정%20표현/감사합니다.wav')">감사합니다</button>
 <button onclick="playAudio('인사와%20감정%20표현/미안합니다.wav')">미안합니다</button>
 <button onclick="playAudio('인사와%20감정%20표현/반갑습니다.wav')">반갑습니다</button>
@@ -195,10 +414,12 @@
 <button onclick="playAudio('인사와%20감정%20표현/좋아요.wav')">좋아요</button>
 <button onclick="playAudio('인사와%20감정%20표현/천천히.wav')">천천히</button>
 <button onclick="playAudio('인사와%20감정%20표현/크게.wav')">크게</button>
-<button onclick="playAudio('인사와%20감정%20표현/걱정하지 마세요.mp3')">크게</button>
 </div>
+</div>
+
 <div class="section">
 <h2>학습 관련 표현</h2>
+<div class="button-grid">
 <button onclick="playAudio('학습%20관련%20표현/곱셈.wav')">곱셈</button>
 <button onclick="playAudio('학습%20관련%20표현/구구단.wav')">구구단</button>
 <button onclick="playAudio('학습%20관련%20표현/국어.wav')">국어</button>
@@ -208,6 +429,8 @@
 <button onclick="playAudio('학습%20관련%20표현/덧셈.wav')">덧셈</button>
 <button onclick="playAudio('학습%20관련%20표현/도덕.wav')">도덕</button>
 <button onclick="playAudio('학습%20관련%20표현/미술.wav')">미술</button>
+<button onclick="playAudio('학습 관련 표현/오른쪽.mp3')">오른쪽</button>
+<button onclick="playAudio('학습 관련 표현/왼쪽.mp3')">왼쪽</button>
 <button onclick="playAudio('학습%20관련%20표현/받아쓰기.wav')">받아쓰기</button>
 <button onclick="playAudio('학습%20관련%20표현/뺄셈.wav')">뺄셈</button>
 <button onclick="playAudio('학습%20관련%20표현/사회.wav')">사회</button>
@@ -223,11 +446,12 @@
 <button onclick="playAudio('학습%20관련%20표현/친구들.wav')">친구들</button>
 <button onclick="playAudio('학습%20관련%20표현/학교.wav')">학교</button>
 <button onclick="playAudio('학습%20관련%20표현/학생.wav')">학생</button>
-<button onclick="playAudio('학습 관련 표현/왼쪽.mp3')">왼쪽</button>
-<button onclick="playAudio('학습 관련 표현/오른쪽.mp3')">오른쪽</button>
 </div>
+</div>
+
 <div class="section">
 <h2>학용품 관련 표현</h2>
+<div class="button-grid">
 <button onclick="playAudio('학용품%20관련%20표현/가방.wav')">가방</button>
 <button onclick="playAudio('학용품%20관련%20표현/가위.wav')">가위</button>
 <button onclick="playAudio('학용품%20관련%20표현/공책.wav')">공책</button>
@@ -241,8 +465,11 @@
 <button onclick="playAudio('학용품%20관련%20표현/책.wav')">책</button>
 <button onclick="playAudio('학용품%20관련%20표현/풀.wav')">풀</button>
 </div>
+</div>
+
 <div class="section">
 <h2>도서관편</h2>
+<div class="button-grid">
 <button onclick="playAudio('도서관편/다음에 빌려요.mp3')">다음에 빌려요</button>
 <button onclick="playAudio('도서관편/대출해요.mp3')">대출해요</button>
 <button onclick="playAudio('도서관편/두 권까지.mp3')">두 권까지</button>
@@ -255,14 +482,17 @@
 <button onclick="playAudio('도서관편/책이 어디에 있나요.mp3')">책이 어디에 있나요</button>
 <button onclick="playAudio('도서관편/책이 연체되었어요.mp3')">책이 연체되었어요</button>
 </div>
+</div>
 
-  <audio id="audioPlayer"></audio>
-  <script>
-    function playAudio(src) {
-      const audio = document.getElementById("audioPlayer");
-      audio.src = src;
-      audio.play();
-    }
-  </script>
+</div>
+
+<audio id="audioPlayer"></audio>
+<script>
+function playAudio(src) {
+  const audio = document.getElementById("audioPlayer");
+  audio.src = src;
+  audio.play();
+}
+</script>
 </body>
 </html>
